@@ -9,7 +9,7 @@ bool isBrackets(char item)
 {
     return item == '(' || item == ')';
 }
-
+//TODO все ок
 int getPriority(char item)
 {
     if(item == '*' || item == '/')
