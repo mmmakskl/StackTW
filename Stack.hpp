@@ -5,6 +5,7 @@
 #include <cstring>
 #include <string>
 #include "exception.hpp"
+#include "abstract.hpp"
 
 void test();
 
@@ -19,24 +20,11 @@ int evaluatePostfix(const std::string& postfix, const size_t stackSize);
 std::ostream& operator<<(std::ostream& out, const std::string& postfix);
 
 template<typename T>
-class Stack
-{
-public:
-    virtual ~Stack() {}
-    virtual void push(const T& e) = 0;
-    virtual T pop() = 0;
-    virtual bool isEmpty() = 0;
-};
-
-/* 
-* Initialization and definition of the StackArray class:
-*/
-template<typename T>
 class StackArray : public Stack<T>
 {
 private:
     std::size_t size_;
-    int top_;
+    std::size_t top_;
     T* array_;
     void swap(StackArray<T>& src)
     {
@@ -61,9 +49,9 @@ public:
 template <typename T>
 inline StackArray<T>::StackArray(size_t size) :
     size_(size), 
-    top_(-1)
+    top_(0)
 {
-    if(size < 0)
+    if(size == 0)
     {
         throw WrongStackSize();
     }
@@ -79,33 +67,29 @@ inline StackArray<T>::~StackArray()
 template <typename T>
 inline void StackArray<T>::push(const T &e) 
 {
-    if (top_ + 1 == size_)
-    {
+    if (top_ == size_)
         throw StackOverflow();
-    }
-    array_[++top_] = e;
+    array_[top_++] = e;
 }
 
 template <typename T>
 inline T StackArray<T>::pop() 
 {
     if (isEmpty())
-    {
         throw StackUnderflow();
-    }
-    return array_[top_--];
+    return array_[--top_];
 }
 
 template <typename T>
 inline bool StackArray<T>::isEmpty() 
 {
-    return (top_ == -1);
+    return (top_ == 0);
 }
 
 template <typename T>
 T StackArray<T>::Top() const
 {
-	return array_[top_];
+	return array_[top_ - 1];
 }
 
 template<typename T>
@@ -118,7 +102,7 @@ template <typename T>
 T &StackArray<T>::operator[](size_t top)
 {
     T* array = array_;
-    return array[top];
+    return array[top - 1];
 }
 
 #endif

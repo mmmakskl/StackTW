@@ -9,7 +9,7 @@ bool isBrackets(char item)
 {
     return item == '(' || item == ')';
 }
-//TODO все ок
+
 int getPriority(char item)
 {
     if(item == '*' || item == '/')
@@ -111,7 +111,7 @@ int evaluatePostfix(const std::string& postfix, const size_t stackSize)
             throw InvalidСharacter();
         }
     }
-    if (operands.getTop() + 1 != 1) {
+    if (operands.getTop() != 1) {
         throw WrongExpression();
     }
     return operands.Top();
